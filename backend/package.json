@@ -1,0 +1,18 @@
+{
+  "name": "sekkechi-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "PostgreSQL REST API for Sekkechi",
+  "main": "server.js",
+  "scripts": { "start": "node server.js", "verify-schema": "node scripts/verify-schema.js", "test": "node --test" },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3"
+  },
+  "engines": { "node": ">=20" }
+}

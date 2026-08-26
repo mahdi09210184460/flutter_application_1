@@ -1,0 +1,35 @@
+name: sekkechi
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sekkechi
+      POSTGRES_USER: sekkechi
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sekkechi -d sekkechi"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - sekkechi_pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/002-seed.sql:ro
+
+  backend:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://sekkechi:${POSTGRES_PASSWORD}@postgres:5432/sekkechi
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  sekkechi_pgdata:
